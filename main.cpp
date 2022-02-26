@@ -11,13 +11,8 @@
 #include <regex>
 #include <locale>
 #include <exception>
-#include <unistd.h>
-#include <boost/algorithm/string.hpp>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
-#include <boost/date_time/date_facet.hpp>
-#include <boost/date_time/time_facet.hpp>
-#include <mpreal.h>
 #include "text/SyntaxException.hpp"
 #include "TruthTableExpressionParser.hpp"
 #include "Setup.hpp"
