@@ -25,8 +25,6 @@ inline std::list<std::unique_ptr<DefaultVariableType>> defaultUninitializedVaria
 inline std::unordered_map<std::string, std::unique_ptr<DefaultVariableType>> defaultInitializedVariableCache;
 inline std::unordered_map<std::string, IVariableToken*> defaultVariables;
 
-inline std::vector<DefaultValueType> defaultResults;
-
 inline std::vector<std::tuple<const IUnaryOperatorToken*, std::string, std::string>> defaultUnaryOperatorInfoMap;
 inline std::vector<std::tuple<const IBinaryOperatorToken*, std::string, std::string>> defaultBinaryOperatorInfoMap;
 inline std::vector<std::tuple<const IFunctionToken*, std::string, std::string>> defaultFunctionInfoMap;

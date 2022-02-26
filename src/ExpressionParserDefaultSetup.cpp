@@ -116,44 +116,6 @@ static IValueToken* BinaryOperator_BitwiseXor(IValueToken* lhs, IValueToken* rhs
                                                     rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
 }
 #endif // __REGION__BINOPS__BITWISE
-
-#ifndef __REGION__BINOPS__SPECIAL
-static IValueToken* BinaryOperator_VariableAssignment(IValueToken* lhs, IValueToken* rhs)
-{
-  DefaultVariableType* variable = lhs->AsPointer<DefaultVariableType>();
-  if(variable == nullptr)
-  {
-    throw SyntaxException((boost::format("Assignment of non-variable type: %1% (%2%)") % lhs->ToString() % lhs->GetTypeInfo().name()).str());
-  }
-
-  bool isInitialAssignment = !variable->IsInitialized();
-
-  auto rhsValue = rhs->AsPointer<DefaultValueType>();
-  if(rhs->GetType() == typeid(DefaultArithmeticType))
-  {
-    (*variable) = rhsValue->GetValue<DefaultArithmeticType>();
-  }
-  else if(rhs->GetType() == typeid(std::nullptr_t))
-  {
-    (*variable) = rhsValue->GetValue<std::nullptr_t>();
-  }
-  else
-  {
-    throw SyntaxException((boost::format("Assignment from unsupported type: %1% (%2%)") % rhs->ToString() % rhs->GetType().name()).str());
-  }
-
-  if(isInitialAssignment)
-  {
-    auto variableIterator =
-        std::find_if(defaultUninitializedVariableCache.begin(),
-                     defaultUninitializedVariableCache.end(),
-                     [&variable](const std::unique_ptr<DefaultVariableType>& element) { return (*element).GetIdentifier() == variable->GetIdentifier(); });
-    defaultInitializedVariableCache[variable->GetIdentifier()] = std::move(*variableIterator);
-  }
-
-  return variable;
-}
-#endif // __REGION__BINOPS__SPECIAL
 #endif // __REGION__BINOPS
 
 #ifndef __REGION__FUNCTIONS
@@ -232,8 +194,6 @@ void InitTruthTable(TruthTableExpressionParser& instance)
   addBinaryOperator(BinaryOperator_BitwiseOr, "+", 2, Associativity::Left, "Bitwise OR", "x + y");
   addBinaryOperator(BinaryOperator_BitwiseAnd, "*", 2, Associativity::Left, "Bitwise AND", "x * y");
   addBinaryOperator(BinaryOperator_BitwiseXor, "/", 2, Associativity::Left, "Bitwise XOR", "x / y");
-  defaultBinaryOperatorInfoMap.push_back(std::make_tuple(nullptr, "", ""));
-  addBinaryOperator(BinaryOperator_VariableAssignment, "=", 6, Associativity::Right, "Assignment", "Assigns variable");
 
   addFunction(Function_Not, "NOT", 1u, 1u, "Not", "NOT x");
   defaultFunctionInfoMap.push_back(std::make_tuple(nullptr, "", ""));

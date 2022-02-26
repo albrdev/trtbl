@@ -302,8 +302,6 @@ int main(int argc, char* argv[])
 
   if(argVariableMap.count("expr") > 0u)
   {
-    defaultResults.clear();
-
     const auto& exprs = argVariableMap["expr"].as<const std::vector<std::string>&>();
     for(auto& expr : exprs)
     {
