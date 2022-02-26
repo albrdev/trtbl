@@ -62,15 +62,27 @@ void resolveEnvironmentVariables(std::vector<std::string>& result)
     result.push_back(pTmp);
   }
 
-  if((pTmp = std::getenv("TRTBL_IPAD")) != nullptr)
+  if((pTmp = std::getenv("TRTBL_IPAD_A")) != nullptr)
   {
-    result.push_back("TRTBL_IPAD");
+    result.push_back("TRTBL_IPAD_A");
     result.push_back(pTmp);
   }
 
-  if((pTmp = std::getenv("TRTBL_OPAD")) != nullptr)
+  if((pTmp = std::getenv("TRTBL_IPAD_B")) != nullptr)
   {
-    result.push_back("TRTBL_OPAD");
+    result.push_back("TRTBL_IPAD_B");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_OPAD_A")) != nullptr)
+  {
+    result.push_back("TRTBL_OPAD_A");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_OPAD_B")) != nullptr)
+  {
+    result.push_back("TRTBL_OPAD_B");
     result.push_back(pTmp);
   }
 
@@ -131,7 +143,7 @@ static void evaluate(const std::string& expression, TruthTableExpressionParser& 
   for(; iter != last; iter++)
   {
     columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
-    std::string lineFormat = (boost::format("%%|1$-%1%|") % (columnAlignment.back() + options.ipad + 2u)).str();
+    std::string lineFormat = (boost::format("%%|1$-%1%|") % (columnAlignment.back() + (options.ipad_a + options.ipad_b) + 1u)).str();
     std::cout << (boost::format(lineFormat) % iter->get()->GetIdentifier());
   }
   columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
@@ -146,10 +158,10 @@ static void evaluate(const std::string& expression, TruthTableExpressionParser& 
     auto alignIter  = columnAlignment.cbegin();
     for(; iter != last; iter++, alignIter++)
     {
-      std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-2|") % (*alignIter + options.ipad)).str();
+      std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-%2%|") % (*alignIter + options.ipad_a) % (options.ipad_b + 1u)).str();
       std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.isep);
     }
-    std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-2|%%|3$|") % (*alignIter + options.opad)).str();
+    std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-%2%|%%|3$|") % (*alignIter + options.opad_a) % (options.opad_b + 1u)).str();
     std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.osep %
                   (result.GetValue<DefaultArithmeticType>() ? options.tsub : options.fsub))
               << std::endl;
@@ -287,8 +299,10 @@ static void printOptions()
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "False substitution" % options.fsub) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input separator" % options.isep) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output separator" % options.osep) << std::endl;
-  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input padding" % options.ipad) << std::endl;
-  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding" % options.opad) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input padding (Prefix)" % options.ipad_a) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input padding (Postfix)" % options.ipad_b) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding (Prefix)" % options.opad_a) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding (Postfix)" % options.opad_b) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Juxtaposition precedence" % options.jpo_precedence) << std::endl;
   std::cerr << std::endl;
 }
@@ -297,7 +311,7 @@ static void printVersion() { std::cout << (boost::format("%1% v%2%") % PROJECT_N
 
 static void printUsage(const boost::program_options::options_description& desc)
 {
-  std::cerr << (boost::format("%1% -[tfsSpPjlvVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
+  std::cerr << (boost::format("%1% -[tfsSpPuUjlvVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
   std::cerr << desc << std::endl;
 }
 
@@ -310,8 +324,10 @@ int main(int argc, char* argv[])
   namedEnvDescs.add_options()("TRTBL_FALSE", boost::program_options::value<std::string>(&options.fsub)->default_value(defaultOptions.fsub));
   namedEnvDescs.add_options()("TRTBL_ISEP", boost::program_options::value<char>(&options.isep)->default_value(defaultOptions.isep));
   namedEnvDescs.add_options()("TRTBL_OSEP", boost::program_options::value<char>(&options.osep)->default_value(defaultOptions.osep));
-  namedEnvDescs.add_options()("TRTBL_IPAD", boost::program_options::value<std::size_t>(&options.ipad)->default_value(defaultOptions.ipad));
-  namedEnvDescs.add_options()("TRTBL_OPAD", boost::program_options::value<std::size_t>(&options.opad)->default_value(defaultOptions.opad));
+  namedEnvDescs.add_options()("TRTBL_IPAD_A", boost::program_options::value<std::size_t>(&options.ipad_a)->default_value(defaultOptions.ipad_a));
+  namedEnvDescs.add_options()("TRTBL_IPAD_B", boost::program_options::value<std::size_t>(&options.ipad_b)->default_value(defaultOptions.ipad_b));
+  namedEnvDescs.add_options()("TRTBL_OPAD_A", boost::program_options::value<std::size_t>(&options.opad_a)->default_value(defaultOptions.opad_a));
+  namedEnvDescs.add_options()("TRTBL_OPAD_B", boost::program_options::value<std::size_t>(&options.opad_b)->default_value(defaultOptions.opad_b));
   namedEnvDescs.add_options()("TRTBL_JUXTA", boost::program_options::value<int>(&options.jpo_precedence)->default_value(defaultOptions.jpo_precedence));
   boost::program_options::variables_map envVariableMap;
   boost::program_options::store(boost::program_options::command_line_parser(envs)
@@ -327,8 +343,10 @@ int main(int argc, char* argv[])
   namedArgDescs.add_options()("false,f", boost::program_options::value<std::string>(&options.fsub), "Set \'false\' substitution");
   namedArgDescs.add_options()("isep,s", boost::program_options::value<char>(&options.isep), "Set input separator");
   namedArgDescs.add_options()("osep,S", boost::program_options::value<char>(&options.osep), "Set output separator");
-  namedArgDescs.add_options()("ipad,p", boost::program_options::value<std::size_t>(&options.ipad), "Set input padding");
-  namedArgDescs.add_options()("opad,P", boost::program_options::value<std::size_t>(&options.opad), "Set output padding");
+  namedArgDescs.add_options()("ipad_a,p", boost::program_options::value<std::size_t>(&options.ipad_a), "Set input padding (Prefix)");
+  namedArgDescs.add_options()("ipad_b,P", boost::program_options::value<std::size_t>(&options.ipad_b), "Set input padding (Postfix)");
+  namedArgDescs.add_options()("opad_a,u", boost::program_options::value<std::size_t>(&options.opad_a), "Set output padding (Prefix)");
+  namedArgDescs.add_options()("opad_b,U", boost::program_options::value<std::size_t>(&options.opad_b), "Set output padding (Postfix)");
   namedArgDescs.add_options()("juxta,j",
                               boost::program_options::value<int>()->notifier([](int value) { options.jpo_precedence = sgn(value); }),
                               "Set juxtaposition operator precedence (-1, 0, 1)");

@@ -36,12 +36,14 @@ struct trtbl_options
   std::string fsub;
   char isep;
   char osep;
-  std::size_t ipad;
-  std::size_t opad;
+  std::size_t ipad_a;
+  std::size_t ipad_b;
+  std::size_t opad_a;
+  std::size_t opad_b;
   int jpo_precedence;
 };
 
-const inline trtbl_options defaultOptions {"1", "0", ' ', '=', 1u, 1u, -1};
+const inline trtbl_options defaultOptions {"1", "0", ' ', '=', 1u, 1u, 1u, 1u, -1};
 inline trtbl_options options {};
 
 void InitTruthTable(TruthTableExpressionParser& instance);
