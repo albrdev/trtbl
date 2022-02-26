@@ -76,15 +76,18 @@ static void evaluate(const std::string& expression, TruthTableExpressionParser& 
 {
   auto queue = expressionParser.Parse(expression);
   std::list<unsigned int> premutations(defaultUninitializedVariableCache.size(), 0u);
+  const std::size_t maxSubLen = std::max(options.fsub.length(), options.tsub.length());
+  std::list<std::size_t> columnAlignment;
 
-  std::size_t varMaxLen = 0u;
-  const auto last       = std::prev(defaultUninitializedVariableCache.cend());
-  auto iter             = defaultUninitializedVariableCache.cbegin();
+  const auto last = std::prev(defaultUninitializedVariableCache.cend());
+  auto iter       = defaultUninitializedVariableCache.cbegin();
   for(; iter != last; iter++)
   {
-    std::cout << iter->get()->GetIdentifier() << std::string(options.isep.length(), ' ');
-    varMaxLen = std::max(varMaxLen, iter->get()->GetIdentifier().length());
+    columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
+    std::string lineFormat = (boost::format("%%|1$-%1%|") % (columnAlignment.back() + options.ipad + 2u)).str();
+    std::cout << (boost::format(lineFormat) % iter->get()->GetIdentifier());
   }
+  columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
   std::cout << iter->get()->GetIdentifier() << std::endl;
 
   do
@@ -93,12 +96,16 @@ static void evaluate(const std::string& expression, TruthTableExpressionParser& 
     auto result     = DefaultValueType(expressionParser.Evaluate(queue)->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>());
     const auto last = std::prev(premutations.cend());
     auto iter       = premutations.cbegin();
-    for(; iter != last; iter++)
+    auto alignIter  = columnAlignment.cbegin();
+    for(; iter != last; iter++, alignIter++)
     {
-      std::cout << ((*iter != 0u) ? options.tsub : options.fsub) << options.isep;
+      std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-2|") % (*alignIter + options.ipad)).str();
+      std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.isep);
     }
-    std::cout << ((*iter != 0u) ? options.tsub : options.fsub);
-    std::cout << options.osep << (result.GetValue<DefaultArithmeticType>() ? options.tsub : options.fsub) << std::endl;
+    std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-2|%%|3$|") % (*alignIter + options.opad)).str();
+    std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.osep %
+                  (result.GetValue<DefaultArithmeticType>() ? options.tsub : options.fsub))
+              << std::endl;
   } while(cartesianProduct(premutations.begin(), premutations.end(), 0u, 1u));
 
   clearVariableCache();
@@ -244,8 +251,10 @@ int main(int argc, char* argv[])
   namedArgDescs.add_options()("fsub,f",
                               boost::program_options::value<std::string>(&options.fsub)->default_value(defaultOptions.fsub),
                               "Set \'false\' substitution");
-  namedArgDescs.add_options()("isep,s", boost::program_options::value<std::string>(&options.isep)->default_value(defaultOptions.isep), "Set input separator");
-  namedArgDescs.add_options()("osep,S", boost::program_options::value<std::string>(&options.osep)->default_value(defaultOptions.osep), "Set output separator");
+  namedArgDescs.add_options()("isep,s", boost::program_options::value<char>(&options.isep)->default_value(defaultOptions.isep), "Set input separator");
+  namedArgDescs.add_options()("osep,S", boost::program_options::value<char>(&options.osep)->default_value(defaultOptions.osep), "Set output separator");
+  namedArgDescs.add_options()("ipad,p", boost::program_options::value<std::size_t>(&options.ipad)->default_value(defaultOptions.ipad), "Set input padding");
+  namedArgDescs.add_options()("opad,P", boost::program_options::value<std::size_t>(&options.opad)->default_value(defaultOptions.opad), "Set output padding");
   namedArgDescs.add_options()(
       "juxta,j",
       boost::program_options::value<int>()->default_value(defaultOptions.jpo_precedence)->notifier([](int value) { options.jpo_precedence = sgn(value); }),
