@@ -34,6 +34,53 @@ int sgn(T value)
   return (value > static_cast<T>(0)) - (value < static_cast<T>(0));
 }
 
+void resolveEnvironmentVariables(std::vector<std::string>& result)
+{
+  const char* pTmp;
+
+  if((pTmp = std::getenv("TRTBL_TRUE")) != nullptr)
+  {
+    result.push_back("TRTBL_TRUE");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_FALSE")) != nullptr)
+  {
+    result.push_back("TRTBL_FALSE");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_ISEP")) != nullptr)
+  {
+    result.push_back("TRTBL_ISEP");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_OSEP")) != nullptr)
+  {
+    result.push_back("TRTBL_OSEP");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_IPAD")) != nullptr)
+  {
+    result.push_back("TRTBL_IPAD");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_OPAD")) != nullptr)
+  {
+    result.push_back("TRTBL_OPAD");
+    result.push_back(pTmp);
+  }
+
+  if((pTmp = std::getenv("TRTBL_JUXTA")) != nullptr)
+  {
+    result.push_back("TRTBL_JUXTA");
+    result.push_back(pTmp);
+  }
+}
+
 template<typename InputIterator, typename T>
 bool cartesianProduct(InputIterator begin, InputIterator end, T min, T max)
 {
@@ -233,40 +280,64 @@ static void list(const std::string& searchPattern)
   }
 }
 
+static void printOptions()
+{
+  std::cerr << "Options" << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "True substitution" % options.tsub) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "False substitution" % options.fsub) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input separator" % options.isep) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output separator" % options.osep) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input padding" % options.ipad) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding" % options.opad) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Juxtaposition precedence" % options.jpo_precedence) << std::endl;
+  std::cerr << std::endl;
+}
+
 static void printVersion() { std::cout << (boost::format("%1% v%2%") % PROJECT_NAME % PROJECT_VERSION) << std::endl; }
 
 static void printUsage(const boost::program_options::options_description& desc)
 {
-  std::cerr << (boost::format("%1% -[jlVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
+  std::cerr << (boost::format("%1% -[tfsSpPjlvVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
   std::cerr << desc << std::endl;
 }
 
 int main(int argc, char* argv[])
 {
+  std::vector<std::string> envs;
+  resolveEnvironmentVariables(envs);
+  boost::program_options::options_description namedEnvDescs;
+  namedEnvDescs.add_options()("TRTBL_TRUE", boost::program_options::value<std::string>(&options.tsub)->default_value(defaultOptions.tsub));
+  namedEnvDescs.add_options()("TRTBL_FALSE", boost::program_options::value<std::string>(&options.fsub)->default_value(defaultOptions.fsub));
+  namedEnvDescs.add_options()("TRTBL_ISEP", boost::program_options::value<char>(&options.isep)->default_value(defaultOptions.isep));
+  namedEnvDescs.add_options()("TRTBL_OSEP", boost::program_options::value<char>(&options.osep)->default_value(defaultOptions.osep));
+  namedEnvDescs.add_options()("TRTBL_IPAD", boost::program_options::value<std::size_t>(&options.ipad)->default_value(defaultOptions.ipad));
+  namedEnvDescs.add_options()("TRTBL_OPAD", boost::program_options::value<std::size_t>(&options.opad)->default_value(defaultOptions.opad));
+  namedEnvDescs.add_options()("TRTBL_JUXTA", boost::program_options::value<int>(&options.jpo_precedence)->default_value(defaultOptions.jpo_precedence));
+  boost::program_options::variables_map envVariableMap;
+  boost::program_options::store(boost::program_options::command_line_parser(envs)
+                                    .options(namedEnvDescs)
+                                    .extra_parser([](const std::string& value) { return std::make_pair(value, std::string()); })
+                                    .run(),
+                                envVariableMap);
+  boost::program_options::notify(envVariableMap);
+
   boost::program_options::options_description namedArgDescs("Options");
   namedArgDescs.add_options()("expr,x", boost::program_options::value<std::vector<std::string>>(), "Add an expression");
-  namedArgDescs.add_options()("tsub,t",
-                              boost::program_options::value<std::string>(&options.tsub)->default_value(defaultOptions.tsub),
-                              "Set \'true\' substitution");
-  namedArgDescs.add_options()("fsub,f",
-                              boost::program_options::value<std::string>(&options.fsub)->default_value(defaultOptions.fsub),
-                              "Set \'false\' substitution");
-  namedArgDescs.add_options()("isep,s", boost::program_options::value<char>(&options.isep)->default_value(defaultOptions.isep), "Set input separator");
-  namedArgDescs.add_options()("osep,S", boost::program_options::value<char>(&options.osep)->default_value(defaultOptions.osep), "Set output separator");
-  namedArgDescs.add_options()("ipad,p", boost::program_options::value<std::size_t>(&options.ipad)->default_value(defaultOptions.ipad), "Set input padding");
-  namedArgDescs.add_options()("opad,P", boost::program_options::value<std::size_t>(&options.opad)->default_value(defaultOptions.opad), "Set output padding");
-  namedArgDescs.add_options()(
-      "juxta,j",
-      boost::program_options::value<int>()->default_value(defaultOptions.jpo_precedence)->notifier([](int value) { options.jpo_precedence = sgn(value); }),
-      "Set juxtaposition operator precedence (-1, 0, 1)");
+  namedArgDescs.add_options()("true,t", boost::program_options::value<std::string>(&options.tsub), "Set \'true\' substitution");
+  namedArgDescs.add_options()("false,f", boost::program_options::value<std::string>(&options.fsub), "Set \'false\' substitution");
+  namedArgDescs.add_options()("isep,s", boost::program_options::value<char>(&options.isep), "Set input separator");
+  namedArgDescs.add_options()("osep,S", boost::program_options::value<char>(&options.osep), "Set output separator");
+  namedArgDescs.add_options()("ipad,p", boost::program_options::value<std::size_t>(&options.ipad), "Set input padding");
+  namedArgDescs.add_options()("opad,P", boost::program_options::value<std::size_t>(&options.opad), "Set output padding");
+  namedArgDescs.add_options()("juxta,j",
+                              boost::program_options::value<int>()->notifier([](int value) { options.jpo_precedence = sgn(value); }),
+                              "Set juxtaposition operator precedence (-1, 0, 1)");
   namedArgDescs.add_options()("list,l", boost::program_options::value<std::string>()->implicit_value(".*"), "List available operators/functions/variables");
   namedArgDescs.add_options()("verbose,v", "Enable verbose mode");
   namedArgDescs.add_options()("version,V", "Print version");
   namedArgDescs.add_options()("help,h", "Print usage");
-
   boost::program_options::positional_options_description positionalArgDescs;
   positionalArgDescs.add("expr", -1);
-
   boost::program_options::variables_map argVariableMap;
   boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(namedArgDescs).positional(positionalArgDescs).run(),
                                 argVariableMap);
@@ -282,6 +353,11 @@ int main(int argc, char* argv[])
   {
     printVersion();
     std::exit(EXIT_SUCCESS);
+  }
+
+  if(argVariableMap.count("verbose") > 0u)
+  {
+    printOptions();
   }
 
   TruthTableExpressionParser expressionParser;
