@@ -132,7 +132,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-5|%|2$-5|%|3$-9|%|4$-20|%|5$|") % identifier % precedence % associativity % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-5|%|2$-5|%|3$-9|%|4$-7|%|5$|") % identifier % precedence % associativity % title % description).str() << std::endl;
       isPrevEmptyLine = false;
     }
   }
@@ -162,7 +162,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-6|%|2$-5|%|3$-9|%|4$-25|%|5$|") % identifier % precedence % associativity % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-6|%|2$-5|%|3$-9|%|4$-15|%|5$|") % identifier % precedence % associativity % title % description).str() << std::endl;
       isPrevEmptyLine = false;
     }
   }
@@ -192,7 +192,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-15|%|2$-5|%|3$-5|%|4$-27|%|5$|") % identifier % argMinCount % argMaxCount % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-15|%|2$-5|%|3$-5|%|4$-7|%|5$|") % identifier % argMinCount % argMaxCount % title % description).str() << std::endl;
       isPrevEmptyLine = false;
     }
   }
@@ -220,7 +220,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-18|%|2$-31|%|3$|") % identifier % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-18|%|2$-9|%|3$|") % identifier % title % description).str() << std::endl;
       isPrevEmptyLine = false;
     }
   }
