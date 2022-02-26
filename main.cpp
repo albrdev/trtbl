@@ -20,7 +20,7 @@
 #include <mpreal.h>
 #include "text/SyntaxException.hpp"
 #include "TruthTableExpressionParser.hpp"
-#include "TrTblSetup.hpp"
+#include "Setup.hpp"
 
 static const std::unordered_map<Associativity, std::string> associativityNameMap = {
     {Associativity::Left, "Left"},
