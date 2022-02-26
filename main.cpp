@@ -1,16 +1,8 @@
-#include <cstdlib>
-#include <cstring>
-#include <cstdio>
-#include <ctime>
-#include <cerrno>
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <iostream>
-#include <memory>
 #include <regex>
-#include <locale>
-#include <exception>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
 #include "text/SyntaxException.hpp"
@@ -306,7 +298,7 @@ static void printVersion() { std::cout << (boost::format("%1% v%2%") % PROJECT_N
 
 static void printUsage(const boost::program_options::options_description& desc)
 {
-  std::cerr << (boost::format("%1% -[tfsSpPuUjlvVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
+  std::cerr << (boost::format("%1% -[xtfsSpPuUjlvVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
   std::cerr << desc << std::endl;
 }
 
