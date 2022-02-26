@@ -350,7 +350,7 @@ int main(int argc, char* argv[])
   namedArgDescs.add_options()("juxta,j",
                               boost::program_options::value<int>()->notifier([](int value) { options.jpo_precedence = sgn(value); }),
                               "Set juxtaposition operator precedence (-1, 0, 1)");
-  namedArgDescs.add_options()("list,l", boost::program_options::value<std::string>()->implicit_value(".*"), "List available operators/functions/variables");
+  namedArgDescs.add_options()("list,l", boost::program_options::value<std::string>()->implicit_value(".*"), "List available operators/variables");
   namedArgDescs.add_options()("verbose,v", "Enable verbose mode");
   namedArgDescs.add_options()("version,V", "Print version");
   namedArgDescs.add_options()("help,h", "Print usage");
