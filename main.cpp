@@ -58,8 +58,7 @@ static void assignInput(const std::list<unsigned int>& premutations)
   auto iter2 = premutations.begin();
   for(; iter1 != defaultUninitializedVariableCache.end(); iter1++, iter2++)
   {
-    auto* var = iter1->get()->AsPointer<DefaultVariableType>();
-    var->SetValue(static_cast<bool>(*iter2));
+    iter1->get()->AsPointer<DefaultVariableType>()->SetValue(static_cast<bool>(*iter2));
   }
 }
 
