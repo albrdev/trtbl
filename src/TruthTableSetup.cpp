@@ -197,13 +197,13 @@ void InitTruthTable(TruthTableExpressionParser& instance)
 
   addFunction(Function_Not, "NOT", 1u, 1u, "Not", "NOT x");
   defaultFunctionInfoMap.push_back(std::make_tuple(nullptr, "", ""));
-  addFunction(Function_Or, "OR", 1u, 1u, "Or", "x OR y");
-  addFunction(Function_And, "AND", 1u, 1u, "Or", "x AND y");
-  addFunction(Function_Xor, "XOR", 1u, 1u, "Or", "x XOR y");
+  addFunction(Function_Or, "OR", 2u, 2u, "Or", "x OR y");
+  addFunction(Function_And, "AND", 2u, 2u, "Or", "x AND y");
+  addFunction(Function_Xor, "XOR", 2u, 2u, "Or", "x XOR y");
   defaultFunctionInfoMap.push_back(std::make_tuple(nullptr, "", ""));
-  addFunction(Function_Nor, "NOR", 1u, 1u, "Or", "x NOR y");
-  addFunction(Function_Nand, "NAND", 1u, 1u, "Or", "x NAND y");
-  addFunction(Function_Xnor, "XNOR", 1u, 1u, "Or", "x XNOR y");
+  addFunction(Function_Nor, "NOR", 2u, 2u, "Or", "x NOR y");
+  addFunction(Function_Nand, "NAND", 2u, 2u, "Or", "x NAND y");
+  addFunction(Function_Xnor, "XNOR", 2u, 2u, "Or", "x XNOR y");
 
   addVariable(true, "true", "True", "Boolean value");
   addVariable(true, "T", "True", "Boolean value");
