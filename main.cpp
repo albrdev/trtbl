@@ -132,7 +132,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-5|%|2$-5|%|3$-9|%|4$-7|%|5$|") % identifier % precedence % associativity % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-5|%|2$-5|%|3$-9|%|4$-7|%|5$|") % identifier % precedence % associativity % title % description) << std::endl;
       isPrevEmptyLine = false;
     }
   }
@@ -162,7 +162,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-6|%|2$-5|%|3$-9|%|4$-15|%|5$|") % identifier % precedence % associativity % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-6|%|2$-5|%|3$-9|%|4$-15|%|5$|") % identifier % precedence % associativity % title % description) << std::endl;
       isPrevEmptyLine = false;
     }
   }
@@ -192,7 +192,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-15|%|2$-5|%|3$-5|%|4$-7|%|5$|") % identifier % argMinCount % argMaxCount % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-8|%|2$-5|%|3$-5|%|4$-7|%|5$|") % identifier % argMinCount % argMaxCount % title % description) << std::endl;
       isPrevEmptyLine = false;
     }
   }
@@ -220,17 +220,17 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-18|%|2$-9|%|3$|") % identifier % title % description).str() << std::endl;
+      std::cout << (boost::format("  %|1$-9|%|2$-9|%|3$|") % identifier % title % description) << std::endl;
       isPrevEmptyLine = false;
     }
   }
 }
 
-static void printVersion() { std::cout << (boost::format("%1% v%2%") % PROJECT_NAME % PROJECT_VERSION).str() << std::endl; }
+static void printVersion() { std::cout << (boost::format("%1% v%2%") % PROJECT_NAME % PROJECT_VERSION) << std::endl; }
 
 static void printUsage(const boost::program_options::options_description& desc)
 {
-  std::cerr << (boost::format("%1% -[jlVh] expr...") % PROJECT_EXECUTABLE).str() << std::endl;
+  std::cerr << (boost::format("%1% -[jlVh] expr...") % PROJECT_EXECUTABLE) << std::endl;
   std::cerr << desc << std::endl;
 }
 
