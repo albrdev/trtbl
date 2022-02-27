@@ -6,7 +6,7 @@
 #include <list>
 #include <unordered_map>
 #include <tuple>
-#include "TruthTableExpressionParser.hpp"
+#include "text/expression/ExpressionParserBase.hpp"
 
 using DefaultArithmeticType = bool;
 using DefaultValueType      = ValueToken<std::nullptr_t, DefaultArithmeticType>;
@@ -46,6 +46,6 @@ struct trtbl_options
 const inline trtbl_options defaultOptions {"1", "0", ' ', '=', 1u, 1u, 1u, 1u, -1};
 inline trtbl_options options {};
 
-void InitTruthTable(TruthTableExpressionParser& instance);
+void InitTruthTable(ExpressionParserBase& instance);
 
 #endif // __TRTBLSETUP_HPP__

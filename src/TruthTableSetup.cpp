@@ -165,7 +165,7 @@ static IValueToken* Function_Xnor(const std::vector<IValueToken*>& args)
 
 static std::unique_ptr<BinaryOperatorToken> juxtapositionOperator;
 
-void InitTruthTable(TruthTableExpressionParser& instance)
+void InitTruthTable(ExpressionParserBase& instance)
 {
   if(options.jpo_precedence != 0)
   {

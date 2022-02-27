@@ -7,7 +7,7 @@
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
 #include "text/SyntaxException.hpp"
-#include "TruthTableExpressionParser.hpp"
+#include "text/expression/ExpressionParserBase.hpp"
 #include "Setup.hpp"
 
 static const std::unordered_map<Associativity, std::string> associativityNameMap = {
@@ -119,7 +119,7 @@ static void clearVariableCache()
   }
 }
 
-static void evaluate(const std::string& expression, TruthTableExpressionParser& expressionParser)
+static void evaluate(const std::string& expression, ExpressionParserBase& expressionParser)
 {
   auto queue = expressionParser.Parse(expression);
   std::list<unsigned int> premutations(defaultUninitializedVariableCache.size(), 0u);
@@ -366,7 +366,7 @@ int main(int argc, char* argv[])
     printOptions();
   }
 
-  TruthTableExpressionParser expressionParser;
+  ExpressionParserBase expressionParser;
   InitTruthTable(expressionParser);
 
   if(argVariableMap.count("list") > 0u)
