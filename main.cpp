@@ -6,8 +6,9 @@
 #include <regex>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
-#include "text/SyntaxException.hpp"
 #include "text/expression/ExpressionParserBase.hpp"
+#include "text/SyntaxException.hpp"
+#include "math/Common.hpp"
 #include "Setup.hpp"
 
 static const std::unordered_map<Associativity, std::string> associativityNameMap = {
@@ -15,12 +16,6 @@ static const std::unordered_map<Associativity, std::string> associativityNameMap
     {Associativity::Right, "Right"},
     {Associativity::Any, "Any"},
 };
-
-template<class T>
-int sgn(T value)
-{
-  return (value > static_cast<T>(0)) - (value < static_cast<T>(0));
-}
 
 void resolveEnvironmentVariables(std::vector<std::string>& result)
 {
@@ -316,7 +311,11 @@ int main(int argc, char* argv[])
   namedEnvDescs.add_options()("TRTBL_IPAD_B", boost::program_options::value<std::size_t>(&options.ipad_b)->default_value(defaultOptions.ipad_b));
   namedEnvDescs.add_options()("TRTBL_OPAD_A", boost::program_options::value<std::size_t>(&options.opad_a)->default_value(defaultOptions.opad_a));
   namedEnvDescs.add_options()("TRTBL_OPAD_B", boost::program_options::value<std::size_t>(&options.opad_b)->default_value(defaultOptions.opad_b));
-  namedEnvDescs.add_options()("TRTBL_JUXTA", boost::program_options::value<int>(&options.jpo_precedence)->default_value(defaultOptions.jpo_precedence));
+  namedEnvDescs.add_options()(
+      "TRTBL_JUXTA",
+      boost::program_options::value<int>(&options.jpo_precedence)->default_value(defaultOptions.jpo_precedence)->notifier([](int value) {
+        options.jpo_precedence = Math::Sign(value);
+      }));
   boost::program_options::variables_map envVariableMap;
   boost::program_options::store(boost::program_options::command_line_parser(envs)
                                     .options(namedEnvDescs)
@@ -336,7 +335,7 @@ int main(int argc, char* argv[])
   namedArgDescs.add_options()("opad_a,u", boost::program_options::value<std::size_t>(&options.opad_a), "Set output padding (Prefix)");
   namedArgDescs.add_options()("opad_b,U", boost::program_options::value<std::size_t>(&options.opad_b), "Set output padding (Postfix)");
   namedArgDescs.add_options()("juxta,j",
-                              boost::program_options::value<int>()->notifier([](int value) { options.jpo_precedence = sgn(value); }),
+                              boost::program_options::value<int>()->notifier([](int value) { options.jpo_precedence = Math::Sign(value); }),
                               "Set juxtaposition operator precedence (-1, 0, 1)");
   namedArgDescs.add_options()("list,l", boost::program_options::value<std::string>()->implicit_value(".*"), "List available operators/variables");
   namedArgDescs.add_options()("verbose,v", "Enable verbose mode");
