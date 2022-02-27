@@ -206,11 +206,15 @@ void InitTruthTable(TruthTableExpressionParser& instance)
   addFunction(Function_Xnor, "XNOR", 2u, 2u, "Or", "x XNOR y");
 
   addVariable(true, "true", "True", "Boolean value");
+  addVariable(true, "t", "True", "Boolean value");
   addVariable(true, "T", "True", "Boolean value");
   addVariable(false, "false", "False", "Boolean value");
+  addVariable(false, "f", "False", "Boolean value");
   addVariable(false, "F", "False", "Boolean value");
   addVariable(true, "high", "High", "Boolean value");
+  addVariable(true, "h", "High", "Boolean value");
   addVariable(true, "H", "High", "Boolean value");
   addVariable(false, "low", "Low", "Boolean value");
+  addVariable(false, "l", "Low", "Boolean value");
   addVariable(false, "L", "Low", "Boolean value");
 }
