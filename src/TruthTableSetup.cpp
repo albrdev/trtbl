@@ -146,7 +146,7 @@ static IValueToken* Function_Xor(const std::vector<IValueToken*>& args)
 static IValueToken* Function_Nor(const std::vector<IValueToken*>& args)
 {
   return new DefaultValueType(
-      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() & args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() | args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
 }
 
 static IValueToken* Function_Nand(const std::vector<IValueToken*>& args)
@@ -158,7 +158,7 @@ static IValueToken* Function_Nand(const std::vector<IValueToken*>& args)
 static IValueToken* Function_Xnor(const std::vector<IValueToken*>& args)
 {
   return new DefaultValueType(
-      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() & args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() ^ args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
 }
 #endif // __REGION__FUNCTIONS__BITWISE
 #endif // __REGION__FUNCTIONS
