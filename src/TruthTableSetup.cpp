@@ -6,8 +6,6 @@
 #include <limits>
 #include <boost/format.hpp>
 #include <boost/date_time/time_duration.hpp>
-#include <gmpxx.h>
-#include "text/SyntaxException.hpp"
 
 static IValueToken* numberConverter(const std::string& value) { return new DefaultValueType(std::stod(value) != 0.0); }
 

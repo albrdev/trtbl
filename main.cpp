@@ -6,8 +6,6 @@
 #include <regex>
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
-#include "text/expression/ExpressionParserBase.hpp"
-#include "text/SyntaxException.hpp"
 #include "math/Common.hpp"
 #include "Setup.hpp"
 

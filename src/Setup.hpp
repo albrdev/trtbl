@@ -7,10 +7,25 @@
 #include <unordered_map>
 #include <tuple>
 #include "text/expression/ExpressionParserBase.hpp"
+#include "text/exception/SyntaxException.hpp"
 
 using DefaultArithmeticType = bool;
-using DefaultValueType      = ValueToken<std::nullptr_t, DefaultArithmeticType>;
-using DefaultVariableType   = VariableToken<std::nullptr_t, DefaultArithmeticType>;
+using DefaultValueType      = text::expression::ValueToken<std::nullptr_t, DefaultArithmeticType>;
+using DefaultVariableType   = text::expression::VariableToken<std::nullptr_t, DefaultArithmeticType>;
+
+using text::expression::IValueToken;
+using text::expression::IVariableToken;
+using text::expression::IUnaryOperatorToken;
+using text::expression::IBinaryOperatorToken;
+using text::expression::IFunctionToken;
+using text::expression::UnaryOperatorToken;
+using text::expression::BinaryOperatorToken;
+using text::expression::FunctionToken;
+
+using text::expression::Associativity;
+
+using text::expression::ExpressionParserBase;
+using text::exception::SyntaxException;
 
 inline std::unordered_map<char, std::unique_ptr<UnaryOperatorToken>> defaultUnaryOperatorCache;
 inline std::unordered_map<char, IUnaryOperatorToken*> defaultUnaryOperators;
