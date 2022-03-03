@@ -21,6 +21,7 @@ elseif(MSVC)
 endif()
 
 add_library(${TARGET_TRTBL} STATIC)
+set_target_properties(${TARGET_TRTBL} PROPERTIES LINKER_LANGUAGE CXX)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
