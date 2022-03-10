@@ -10,8 +10,8 @@
 #include "text/exception/SyntaxException.hpp"
 
 using DefaultArithmeticType = bool;
-using DefaultValueType      = Text::Expression::ValueToken<std::nullptr_t, DefaultArithmeticType>;
-using DefaultVariableType   = Text::Expression::VariableToken<std::nullptr_t, DefaultArithmeticType>;
+using DefaultValueType      = Text::Expression::ValueToken<DefaultArithmeticType>;
+using DefaultVariableType   = Text::Expression::VariableToken<DefaultArithmeticType>;
 
 using Text::Expression::IValueToken;
 using Text::Expression::IVariableToken;
