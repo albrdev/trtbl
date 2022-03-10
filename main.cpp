@@ -98,7 +98,7 @@ static void assignInput(const std::list<unsigned int>& premutations)
   auto iter2 = premutations.begin();
   for(; iter1 != defaultUninitializedVariableCache.end(); iter1++, iter2++)
   {
-    iter1->get()->AsPointer<DefaultVariableType>()->SetValue(static_cast<bool>(*iter2));
+    iter1->get()->As<DefaultVariableType*>()->SetValue(static_cast<bool>(*iter2));
   }
 }
 
@@ -133,7 +133,7 @@ static void evaluate(const std::string& expression, ExpressionParserBase& expres
   do
   {
     assignInput(premutations);
-    auto result     = DefaultValueType(expressionParser.Evaluate(queue)->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>());
+    auto result     = DefaultValueType(expressionParser.Evaluate(queue)->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
     const auto last = std::prev(premutations.cend());
     auto iter       = premutations.cbegin();
     auto alignIter  = columnAlignment.cbegin();

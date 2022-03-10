@@ -76,7 +76,7 @@ static DefaultValueType* addNewVariable(const std::string& identifier)
 
 #ifndef __REGION__UNOPS
 #ifndef __REGION__UNOPS__BITWISE
-static IValueToken* UnaryOperator_Not(IValueToken* rhs) { return new DefaultValueType(!rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()); }
+static IValueToken* UnaryOperator_Not(IValueToken* rhs) { return new DefaultValueType(!rhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()); }
 #endif // __REGION__UNOPS__BITWISE
 #endif // __REGION__UNOPS
 
@@ -84,34 +84,34 @@ static IValueToken* UnaryOperator_Not(IValueToken* rhs) { return new DefaultValu
 #ifndef __REGION__BINOPS__COMPARISON
 static IValueToken* BinaryOperator_Equals(IValueToken* lhs, IValueToken* rhs)
 {
-  return new DefaultValueType(DefaultArithmeticType(lhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() ==
-                                                    rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+  return new DefaultValueType(DefaultArithmeticType(lhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() ==
+                                                    rhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 
 static IValueToken* BinaryOperator_NotEquals(IValueToken* lhs, IValueToken* rhs)
 {
-  return new DefaultValueType(DefaultArithmeticType(lhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() !=
-                                                    rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+  return new DefaultValueType(DefaultArithmeticType(lhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() !=
+                                                    rhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 #endif // __REGION__BINOPS__COMPARISON
 
 #ifndef __REGION__BINOPS__BITWISE
 static IValueToken* BinaryOperator_BitwiseOr(IValueToken* lhs, IValueToken* rhs)
 {
-  return new DefaultValueType(DefaultArithmeticType(lhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() |
-                                                    rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+  return new DefaultValueType(
+      DefaultArithmeticType(lhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() | rhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 
 static IValueToken* BinaryOperator_BitwiseAnd(IValueToken* lhs, IValueToken* rhs)
 {
-  return new DefaultValueType(DefaultArithmeticType(lhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() &
-                                                    rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+  return new DefaultValueType(
+      DefaultArithmeticType(lhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() & rhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 
 static IValueToken* BinaryOperator_BitwiseXor(IValueToken* lhs, IValueToken* rhs)
 {
-  return new DefaultValueType(DefaultArithmeticType(lhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() ^
-                                                    rhs->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+  return new DefaultValueType(
+      DefaultArithmeticType(lhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() ^ rhs->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 #endif // __REGION__BINOPS__BITWISE
 #endif // __REGION__BINOPS
@@ -120,43 +120,43 @@ static IValueToken* BinaryOperator_BitwiseXor(IValueToken* lhs, IValueToken* rhs
 #ifndef __REGION__FUNCTIONS__BITWISE
 static IValueToken* Function_Not(const std::vector<IValueToken*>& args)
 {
-  return new DefaultValueType(!args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>());
+  return new DefaultValueType(!args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
 }
 
 static IValueToken* Function_Or(const std::vector<IValueToken*>& args)
 {
-  return new DefaultValueType(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() |
-                              args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>());
+  return new DefaultValueType(args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() |
+                              args[1]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
 }
 
 static IValueToken* Function_And(const std::vector<IValueToken*>& args)
 {
-  return new DefaultValueType(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() &
-                              args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>());
+  return new DefaultValueType(args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() &
+                              args[1]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
 }
 
 static IValueToken* Function_Xor(const std::vector<IValueToken*>& args)
 {
-  return new DefaultValueType(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() &
-                              args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>());
+  return new DefaultValueType(args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() &
+                              args[1]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
 }
 
 static IValueToken* Function_Nor(const std::vector<IValueToken*>& args)
 {
   return new DefaultValueType(
-      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() | args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+      !(args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() | args[1]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 
 static IValueToken* Function_Nand(const std::vector<IValueToken*>& args)
 {
   return new DefaultValueType(
-      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() & args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+      !(args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() & args[1]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 
 static IValueToken* Function_Xnor(const std::vector<IValueToken*>& args)
 {
   return new DefaultValueType(
-      !(args[0]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>() ^ args[1]->AsPointer<DefaultValueType>()->GetValue<DefaultArithmeticType>()));
+      !(args[0]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>() ^ args[1]->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>()));
 }
 #endif // __REGION__FUNCTIONS__BITWISE
 #endif // __REGION__FUNCTIONS
