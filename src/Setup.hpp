@@ -1,13 +1,14 @@
 #ifndef __TRTBLSETUP_HPP__
 #define __TRTBLSETUP_HPP__
 
-#include <string>
-#include <vector>
-#include <list>
-#include <unordered_map>
-#include <tuple>
-#include "text/expression/ExpressionParserBase.hpp"
 #include "text/exception/SyntaxException.hpp"
+#include "text/expression/ExpressionParserBase.hpp"
+
+#include <list>
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <vector>
 
 using DefaultArithmeticType = bool;
 using DefaultValueType      = Text::Expression::ValueToken<DefaultArithmeticType>;

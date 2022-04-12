@@ -1,13 +1,15 @@
+#include "Setup.hpp"
+#include "math/Common.hpp"
+
 #include <cstdlib>
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <iostream>
 #include <regex>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
-#include "math/Common.hpp"
-#include "Setup.hpp"
 
 static const std::unordered_map<Associativity, std::string> associativityNameMap = {
     {Associativity::Left, "Left"},
