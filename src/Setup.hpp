@@ -1,5 +1,5 @@
-#ifndef __TRTBLSETUP_HPP__
-#define __TRTBLSETUP_HPP__
+#ifndef __SETUP_HPP__
+#define __SETUP_HPP__
 
 #include "text/exception/SyntaxException.hpp"
 #include "text/expression/ExpressionParserBase.hpp"
@@ -64,4 +64,4 @@ inline trtbl_options options {};
 
 void InitTruthTable(ExpressionParserBase& instance);
 
-#endif // __TRTBLSETUP_HPP__
+#endif // __SETUP_HPP__
