@@ -117,40 +117,49 @@ static void clearVariableCache()
 static void evaluate(const std::string& expression, ExpressionParserBase& expressionParser)
 {
   auto queue = expressionParser.Parse(expression);
-  std::list<unsigned int> premutations(defaultUninitializedVariableCache.size(), 0u);
-  const std::size_t maxSubLen = std::max(options.fsub.length(), options.tsub.length());
-  std::list<std::size_t> columnAlignment;
-
-  const auto last = std::prev(defaultUninitializedVariableCache.cend());
-  auto iter       = defaultUninitializedVariableCache.cbegin();
-  for(; iter != last; iter++)
+  if(!defaultUninitializedVariableCache.empty())
   {
-    columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
-    std::string lineFormat = (boost::format("%%|1$-%1%|") % (columnAlignment.back() + (options.ipad_a + options.ipad_b) + 1u)).str();
-    std::cout << (boost::format(lineFormat) % iter->get()->GetIdentifier());
-  }
-  columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
-  std::cout << iter->get()->GetIdentifier() << std::endl;
+    std::list<unsigned int> premutations(defaultUninitializedVariableCache.size(), 0u);
+    const std::size_t maxSubLen = std::max(options.fsub.length(), options.tsub.length());
+    std::list<std::size_t> columnAlignment;
 
-  do
-  {
-    assignInput(premutations);
-    auto result     = DefaultValueType(expressionParser.Evaluate(queue)->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
-    const auto last = std::prev(premutations.cend());
-    auto iter       = premutations.cbegin();
-    auto alignIter  = columnAlignment.cbegin();
-    for(; iter != last; iter++, alignIter++)
+    const auto last = std::prev(defaultUninitializedVariableCache.cend());
+    auto iter       = defaultUninitializedVariableCache.cbegin();
+    for(; iter != last; iter++)
     {
-      std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-%2%|") % (*alignIter + options.ipad_a) % (options.ipad_b + 1u)).str();
-      std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.isep);
+      columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
+      std::string lineFormat = (boost::format("%%|1$-%1%|") % (columnAlignment.back() + (options.ipad_a + options.ipad_b) + 1u)).str();
+      std::cout << (boost::format(lineFormat) % iter->get()->GetIdentifier());
     }
-    std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-%2%|%%|3$|") % (*alignIter + options.opad_a) % (options.opad_b + 1u)).str();
-    std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.osep %
-                  (result.GetValue<DefaultArithmeticType>() ? options.tsub : options.fsub))
-              << std::endl;
-  } while(cartesianProduct(premutations.begin(), premutations.end(), 0u, 1u));
+    columnAlignment.push_back(std::max(iter->get()->GetIdentifier().length(), maxSubLen));
+    std::cout << iter->get()->GetIdentifier() << std::endl;
 
-  clearVariableCache();
+    do
+    {
+      assignInput(premutations);
+      auto result = DefaultValueType(expressionParser.Evaluate(queue)->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
+
+      const auto last = std::prev(premutations.cend());
+      auto iter       = premutations.cbegin();
+      auto alignIter  = columnAlignment.cbegin();
+      for(; iter != last; iter++, alignIter++)
+      {
+        std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-%2%|") % (*alignIter + options.ipad_a) % (options.ipad_b + 1u)).str();
+        std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.isep);
+      }
+      std::string lineFormat = (boost::format("%%|1$-%1%|%%|2$-%2%|%%|3$|") % (*alignIter + options.opad_a) % (options.opad_b + 1u)).str();
+      std::cout << (boost::format(lineFormat) % ((*iter != 0u) ? options.tsub : options.fsub) % options.osep %
+                    (result.GetValue<DefaultArithmeticType>() ? options.tsub : options.fsub))
+                << std::endl;
+    } while(cartesianProduct(premutations.begin(), premutations.end(), 0u, 1u));
+
+    clearVariableCache();
+  }
+  else
+  {
+    auto result = DefaultValueType(expressionParser.Evaluate(queue)->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
+    std::cout << (boost::format("%1%") % (result.GetValue<DefaultArithmeticType>() ? options.tsub : options.fsub)) << std::endl;
+  }
 }
 
 static void list(const std::string& searchPattern)
