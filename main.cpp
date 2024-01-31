@@ -137,7 +137,9 @@ static void evaluate(const std::string& expression, ExpressionParserBase& expres
     do
     {
       assignInput(premutations);
-      auto result = DefaultValueType(expressionParser.Evaluate(queue)->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
+
+      auto tmpQueue = queue;
+      auto result   = DefaultValueType(expressionParser.Evaluate(tmpQueue)->As<DefaultValueType*>()->GetValue<DefaultArithmeticType>());
 
       const auto last = std::prev(premutations.cend());
       auto iter       = premutations.cbegin();
