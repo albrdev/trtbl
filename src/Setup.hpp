@@ -59,7 +59,7 @@ struct trtbl_options
   int jpo_precedence;
 };
 
-const inline trtbl_options defaultOptions {"1", "0", ' ', '=', 1u, 1u, 1u, 1u, false, -1};
+const inline trtbl_options defaultOptions {"1", "0", ' ', '=', 1u, 1u, 4u, 1u, false, -1};
 inline trtbl_options options {};
 
 void InitTruthTable(ExpressionParserBase& instance);

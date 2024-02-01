@@ -302,7 +302,7 @@ static void printOptions()
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input padding (Postfix)" % options.ipad_b) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding (Prefix)" % options.opad_a) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding (Postfix)" % options.opad_b) << std::endl;
-  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Sort variables lexicographically" % options.sort) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Lexicographical variable sorting" % options.sort) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Juxtaposition precedence" % options.jpo_precedence) << std::endl;
   std::cerr << std::endl;
 }
