@@ -119,6 +119,11 @@ static void evaluate(const std::string& expression, ExpressionParserBase& expres
   auto queue = expressionParser.Parse(expression);
   if(!defaultUninitializedVariableCache.empty())
   {
+    if(options.sort)
+    {
+      defaultUninitializedVariableCache.sort([](const auto& a, const auto& b) { return a.get()->GetIdentifier() < b.get()->GetIdentifier(); });
+    }
+
     std::list<unsigned int> premutations(defaultUninitializedVariableCache.size(), 0u);
     const std::size_t maxSubLen = std::max(options.fsub.length(), options.tsub.length());
     std::list<std::size_t> columnAlignment;
@@ -297,6 +302,7 @@ static void printOptions()
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Input padding (Postfix)" % options.ipad_b) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding (Prefix)" % options.opad_a) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Output padding (Postfix)" % options.opad_b) << std::endl;
+  std::cerr << (boost::format("  %|1$-26|%|2$|") % "Sort variables lexicographically" % options.sort) << std::endl;
   std::cerr << (boost::format("  %|1$-26|%|2$|") % "Juxtaposition precedence" % options.jpo_precedence) << std::endl;
   std::cerr << std::endl;
 }
@@ -322,6 +328,7 @@ int main(int argc, char* argv[])
   namedEnvDescs.add_options()("TRTBL_IPAD_B", boost::program_options::value<std::size_t>(&options.ipad_b)->default_value(defaultOptions.ipad_b));
   namedEnvDescs.add_options()("TRTBL_OPAD_A", boost::program_options::value<std::size_t>(&options.opad_a)->default_value(defaultOptions.opad_a));
   namedEnvDescs.add_options()("TRTBL_OPAD_B", boost::program_options::value<std::size_t>(&options.opad_b)->default_value(defaultOptions.opad_b));
+  namedEnvDescs.add_options()("TRTBL_SORT", boost::program_options::value<bool>(&options.sort)->default_value(defaultOptions.sort));
   namedEnvDescs.add_options()(
       "TRTBL_JUXTA",
       boost::program_options::value<int>(&options.jpo_precedence)->default_value(defaultOptions.jpo_precedence)->notifier([](int value) {
@@ -345,6 +352,7 @@ int main(int argc, char* argv[])
   namedArgDescs.add_options()("ipad_b,P", boost::program_options::value<std::size_t>(&options.ipad_b), "Set input padding (Postfix)");
   namedArgDescs.add_options()("opad_a,u", boost::program_options::value<std::size_t>(&options.opad_a), "Set output padding (Prefix)");
   namedArgDescs.add_options()("opad_b,U", boost::program_options::value<std::size_t>(&options.opad_b), "Set output padding (Postfix)");
+  namedArgDescs.add_options()("sort,a", boost::program_options::value<bool>(&options.sort)->implicit_value(true), "Sort variables lexicographically");
   namedArgDescs.add_options()("juxta,j",
                               boost::program_options::value<int>()->notifier([](int value) { options.jpo_precedence = Math::Sign(value); }),
                               "Set juxtaposition operator precedence (-1, 0, 1)");
