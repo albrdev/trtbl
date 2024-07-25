@@ -257,7 +257,7 @@ static void list(const std::string& searchPattern)
     if(std::regex_match(identifier.begin(), identifier.end(), regex) || std::regex_match(title.begin(), title.end(), regex) ||
        std::regex_match(description.begin(), description.end(), regex))
     {
-      std::cout << (boost::format("  %|1$-8|%|2$-5|%|3$-5|%|4$-7|%|5$|") % identifier % argMinCount % argMaxCount % title % description) << std::endl;
+      std::cout << (boost::format("  %|1$-8|%|2$-5|%|3$-5|%|4$-20|%|5$|") % identifier % argMinCount % argMaxCount % title % description) << std::endl;
       isPrevEmptyLine = false;
     }
   }
